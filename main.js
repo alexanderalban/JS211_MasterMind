@@ -11,13 +11,13 @@ let board = [];
 let solution = '';
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-const printBoard = () =>  {
+const printBoard = () => {
   for (let i = 0; i < board.length; i++) {
     console.log(board[i]);
   }
 }
 
-const generateSolution = () =>  {
+const generateSolution = () => {
   for (let i = 0; i < 4; i++) {
     const randomIndex = getRandomInt(0, letters.length);
     solution += letters[randomIndex];
@@ -28,17 +28,53 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const generateHint = () =>  {
-  // your code here
-}
+const generateHint = (guess) => {
+  let solutionArray = solution.split("");
+  let guessArray = guess.split("");
+  let correctLetters = 0;
+  let correctLetterLocations = 0;
 
+  for (let i = 0; i < solutionArray.length; i++) {
+    if (solutionArray[i] === guessArray[i]) {
+      correctLetterLocations++;
+      solutionArray[i] = null;
+    }
+  }
+  for (let i = 0; i < solutionArray.length; i++) {
+    let targetIndex = solutionArray.indexOf(guessArray[i])
+    if (targetIndex > -1) {
+      correctLetters++;
+      solutionArray[targetIndex] = null;
+    }
+  }
+  let hint = correctLetterLocations.toString() + "-" + correctLetters.toString();
+  return hint;
+};
+
+//Main function!
 const mastermind = (guess) => {
   solution = 'abcd'; // Comment this out to generate a random solution
   // your code here
-}
+  // generateSolution();
+  if (solution === guess) {
+    console.log("You guessed it!")
+    return "You guessed it!"
+  }
+  else {
+    let hint = generateHint(guess);
+    board.push(guess + " " + hint);
+    if (board.length > 10) {
+      console.log("You ran out of turns!")
+      return "You ran out of turns!"
+    } else {
+      console.log("Try Again!")
+      return "Try Again!"
+    }
+  }
+};
 
 
-const getPrompt = () =>  {
+const getPrompt = () => {
   rl.question('guess: ', (guess) => {
     mastermind(guess);
     printBoard();
@@ -59,7 +95,6 @@ if (typeof describe === 'function') {
       assert.equal(mastermind(solution), 'You guessed it!');
     });
   });
-
   describe('#generateHint()', () => {
     it('should generate hints', () => {
       assert.equal(generateHint('abdc'), '2-2');
