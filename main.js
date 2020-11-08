@@ -17,6 +17,7 @@ const printBoard = () => {
   }
 }
 
+//Function to generate a solution (so there is a code to break!)
 const generateSolution = () => {
   for (let i = 0; i < 4; i++) {
     const randomIndex = getRandomInt(0, letters.length);
@@ -24,10 +25,12 @@ const generateSolution = () => {
   }
 }
 
+//Random number generator function
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+// Hint Generation Function!
 const generateHint = (guess) => {
   let solutionArray = solution.split("");
   let guessArray = guess.split("");
@@ -55,6 +58,7 @@ const generateHint = (guess) => {
 const mastermind = (guess) => {
   solution = 'abcd'; // Comment this out to generate a random solution
   // your code here
+  //Commented out generateSolution to pass tests below
   // generateSolution();
   if (solution === guess) {
     console.log("You guessed it!")
@@ -64,8 +68,8 @@ const mastermind = (guess) => {
     let hint = generateHint(guess);
     board.push(guess + " " + hint);
     if (board.length > 10) {
-      console.log("You ran out of turns!")
-      return "You ran out of turns!"
+      console.log("No more turns! Try again")
+      return "No More turns! Try again"
     } else {
       console.log("Try Again!")
       return "Try Again!"
@@ -83,7 +87,6 @@ const getPrompt = () => {
 }
 
 // Tests
-
 if (typeof describe === 'function') {
   solution = 'abcd';
   describe('#mastermind()', () => {
